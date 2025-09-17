@@ -32,6 +32,7 @@ function AppRouter() {
                     <Route path="/login" element={<Login/>}/>
 
                   {/* Protected Dashboard Routes */}
+                  
                   <Route
                     path="/dashboard"
                     element={
