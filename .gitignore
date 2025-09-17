@@ -1,0 +1,51 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*.local
+.env.local
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+.cache/
+coverage/
+
+# Logs
+logs
+*.log
+*.log.*
+*.pid
+*.seed
+*.pid.lock
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Editor / IDE settings
+.vscode/
+.idea/
+*.swp
+
+# Runtime data
+.pids
+*.pid
+*.seed
+*.pid.lock
+
+# Misc
+*.tgz
+*.tar.gz
+*.zip
+
+# Local DBs
+*.sqlite
+*.sqlite3
