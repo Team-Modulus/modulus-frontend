@@ -15,7 +15,7 @@ useEffect(() => {
     console.log("Token saved to localStorage");
     window.history.replaceState({}, document.title, "/dashboard");
   } else {
-    console.log("❌ No token found in URL.");
+    console.log(" No token found in URL.");
   }
 }, [])
   return (
