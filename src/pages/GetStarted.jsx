@@ -1,4 +1,6 @@
-export const GetStartedPage = ({ setCurrentPage }) => {
+import { useState } from "react";
+
+const GetStartedPage = () => {
   const [step, setStep] = useState(1);
   const [onboardingData, setOnboardingData] = useState({
     businessType: '',
@@ -182,3 +184,5 @@ export const GetStartedPage = ({ setCurrentPage }) => {
     </div>
   );
 };
+
+export default GetStartedPage;
