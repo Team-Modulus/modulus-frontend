@@ -12,7 +12,7 @@ const Header = () => {
 
   const navigation = [
     { name: "Features", href: "/features" },
-    { name: "Pricing", href: "/pricing" },
+    { name: "Pricing", href: "pricing" },
     { name: "About", href: "/about" },
     { name: "Contact", href: "/contact" },
   ]
@@ -32,7 +32,7 @@ const Header = () => {
               <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">AI</span>
               </div>
-              <span className="text-xl font-bold text-gray-900">Modulus.aI</span>
+              <span className="text-xl font-bold text-gray-900">Modulus.ai</span>
             </Link>
           </div>
 

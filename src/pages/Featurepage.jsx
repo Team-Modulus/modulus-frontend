@@ -3,12 +3,25 @@
 import { useContext, useState } from "react"
 import { mainContext } from "../context/AuthContext"
 
+// Mock context for demo purposes
+// const mainContext = {
+//   user: {
+//     login: (email, password) => {
+//       console.log(`Logging in with ${email}`)
+//       return Promise.resolve()
+//     }
+//   }
+// }
+
 const FeaturesPage = () => {
   const { user } = useContext(mainContext)
- const login = user
+  const login = user
+  const [expandedFeature, setExpandedFeature] = useState(null)
 
   const handleStartTrial = async () => {
-    await login("demo@example.com", "password")
+    if (login) {
+      await login("demo@example.com", "password")
+    }
   }
 
   const mainFeatures = [
@@ -26,6 +39,23 @@ const FeaturesPage = () => {
         "A/B testing recommendations",
         "Real-time performance predictions",
       ],
+      detailedFeatures: [
+        {
+          title: "Smart Creative Generation",
+          description: "AI creates multiple ad variations optimized for different audiences and platforms",
+          techSpecs: ["Natural Language Processing", "Computer Vision", "Brand Analysis Engine"]
+        },
+        {
+          title: "Performance Prediction",
+          description: "Predict ad performance before launch using historical data and market trends",
+          techSpecs: ["Machine Learning Models", "Predictive Analytics", "Market Intelligence"]
+        },
+        {
+          title: "Dynamic Optimization",
+          description: "Automatically adjust creative elements based on real-time performance data",
+          techSpecs: ["Real-time Processing", "A/B Testing Framework", "Performance Monitoring"]
+        }
+      ],
       image: "/placeholder.svg?height=400&width=600&text=AI+Ad+Creation+Dashboard",
     },
     {
@@ -41,6 +71,23 @@ const FeaturesPage = () => {
         "Custom dashboard creation",
         "Cross-channel attribution",
         "ROI forecasting and optimization",
+      ],
+      detailedFeatures: [
+        {
+          title: "Advanced Attribution Modeling",
+          description: "Multi-touch attribution across all marketing channels and touchpoints",
+          techSpecs: ["Attribution Algorithms", "Cross-channel Tracking", "Journey Mapping"]
+        },
+        {
+          title: "Predictive Insights",
+          description: "Forecast future performance and identify optimization opportunities",
+          techSpecs: ["Time Series Analysis", "Trend Detection", "Forecasting Models"]
+        },
+        {
+          title: "Anomaly Detection",
+          description: "Automatically detect unusual patterns and performance deviations",
+          techSpecs: ["Statistical Analysis", "Pattern Recognition", "Alert Systems"]
+        }
       ],
       image: "/placeholder.svg?height=400&width=600&text=Smart+Analytics+Dashboard",
     },
@@ -58,6 +105,23 @@ const FeaturesPage = () => {
         "CRM integration and sync",
         "Lead quality predictions",
       ],
+      detailedFeatures: [
+        {
+          title: "Dynamic Lead Scoring",
+          description: "AI-powered scoring that adapts based on behavior, engagement, and conversion patterns",
+          techSpecs: ["Behavioral Analytics", "Predictive Scoring", "Dynamic Weighting"]
+        },
+        {
+          title: "Intelligent Segmentation",
+          description: "Automatically segment leads based on multiple data points and behaviors",
+          techSpecs: ["Clustering Algorithms", "Demographic Analysis", "Behavioral Patterns"]
+        },
+        {
+          title: "Automated Nurturing",
+          description: "Personalized nurturing sequences that adapt to individual lead preferences",
+          techSpecs: ["Personalization Engine", "Trigger-based Workflows", "Content Optimization"]
+        }
+      ],
       image: "/placeholder.svg?height=400&width=600&text=Lead+Management+System",
     },
     {
@@ -73,6 +137,23 @@ const FeaturesPage = () => {
         "Creative rotation and testing",
         "Budget allocation optimization",
         "Performance alerts and insights",
+      ],
+      detailedFeatures: [
+        {
+          title: "Automated Bid Management",
+          description: "AI-driven bidding strategies that maximize ROI across all campaigns",
+          techSpecs: ["Bid Optimization Algorithms", "Real-time Adjustments", "Performance Monitoring"]
+        },
+        {
+          title: "Smart Budget Allocation",
+          description: "Dynamically allocate budget to top-performing campaigns and audiences",
+          techSpecs: ["Performance Analysis", "Budget Optimization", "Resource Management"]
+        },
+        {
+          title: "Audience Intelligence",
+          description: "Discover and target high-value audience segments automatically",
+          techSpecs: ["Lookalike Modeling", "Audience Expansion", "Behavioral Targeting"]
+        }
       ],
       image: "/placeholder.svg?height=400&width=600&text=Campaign+Optimization+Tools",
     },
@@ -90,6 +171,23 @@ const FeaturesPage = () => {
         "Automated reporting schedules",
         "Competitive benchmarking",
       ],
+      detailedFeatures: [
+        {
+          title: "Unified Tracking System",
+          description: "Track performance across all channels and touchpoints in one dashboard",
+          techSpecs: ["Cross-platform Integration", "Unified Data Model", "Real-time Sync"]
+        },
+        {
+          title: "Advanced Reporting",
+          description: "Generate custom reports with advanced filtering and data visualization",
+          techSpecs: ["Report Builder", "Data Visualization", "Export Capabilities"]
+        },
+        {
+          title: "Competitive Analysis",
+          description: "Monitor competitor performance and identify market opportunities",
+          techSpecs: ["Market Intelligence", "Competitor Tracking", "Benchmark Analysis"]
+        }
+      ],
       image: "/placeholder.svg?height=400&width=600&text=Performance+Tracking+Analytics",
     },
     {
@@ -105,6 +203,23 @@ const FeaturesPage = () => {
         "Custom API connections",
         "Webhook automation",
         "Data mapping and transformation",
+      ],
+      detailedFeatures: [
+        {
+          title: "Universal Data Sync",
+          description: "Seamlessly sync data between all your marketing and sales tools",
+          techSpecs: ["API Integration", "Real-time Sync", "Data Transformation"]
+        },
+        {
+          title: "Custom Integrations",
+          description: "Build custom integrations with our flexible API and webhook system",
+          techSpecs: ["RESTful APIs", "Webhook Support", "Custom Connectors"]
+        },
+        {
+          title: "Data Management",
+          description: "Centralized data management with mapping, validation, and cleanup tools",
+          techSpecs: ["Data Validation", "Field Mapping", "Quality Control"]
+        }
       ],
       image: "/placeholder.svg?height=400&width=600&text=CRM+Integration+Hub",
     },
@@ -155,13 +270,11 @@ const FeaturesPage = () => {
 
   return (
     <div className="min-h-screen bg-white">
-  
-
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
-            Powerful <span className="gradient-text">AI Features</span>
+            Powerful <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">AI Features</span>
             <br />
             Built for Modern Marketing
           </h1>
@@ -169,7 +282,7 @@ const FeaturesPage = () => {
             Discover how our comprehensive suite of AI-powered tools can transform your marketing strategy and drive
             unprecedented growth.
           </p>
-          <button onClick={handleStartTrial} className="btn-primary text-lg px-8 py-4">
+          <button onClick={handleStartTrial} className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105">
             Start Free Trial
           </button>
         </div>
@@ -215,7 +328,7 @@ const FeaturesPage = () => {
 
                   <button
                     onClick={() => setExpandedFeature(expandedFeature === feature.id ? null : feature.id)}
-                    className="text-blue-600 hover:text-blue-700 font-medium flex items-center"
+                    className="text-blue-600 hover:text-blue-700 font-medium flex items-center transition-colors"
                   >
                     {expandedFeature === feature.id ? "Show Less" : "Learn More"}
                     <svg
@@ -243,29 +356,75 @@ const FeaturesPage = () => {
                 </div>
 
                 {expandedFeature === feature.id && (
-                  <div className="lg:col-span-2 mt-8 p-6 bg-gray-50 rounded-xl">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-4">How {feature.title} Works</h3>
-                    <div className="grid md:grid-cols-3 gap-6">
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <span className="text-blue-600 font-bold">1</span>
+                  <div className="lg:col-span-2 mt-8 space-y-8">
+                    {/* How it Works Section */}
+                    <div className="p-6 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-6">How {feature.title} Works</h3>
+                      <div className="grid md:grid-cols-3 gap-6">
+                        <div className="text-center">
+                          <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span className="text-blue-600 font-bold">1</span>
+                          </div>
+                          <h4 className="font-medium text-gray-900 mb-2">Data Analysis</h4>
+                          <p className="text-sm text-gray-600">AI analyzes your historical data and market trends</p>
                         </div>
-                        <h4 className="font-medium text-gray-900 mb-2">Data Analysis</h4>
-                        <p className="text-sm text-gray-600">AI analyzes your historical data and market trends</p>
+                        <div className="text-center">
+                          <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span className="text-purple-600 font-bold">2</span>
+                          </div>
+                          <h4 className="font-medium text-gray-900 mb-2">Smart Optimization</h4>
+                          <p className="text-sm text-gray-600">Algorithms optimize for your specific goals</p>
+                        </div>
+                        <div className="text-center">
+                          <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                            <span className="text-green-600 font-bold">3</span>
+                          </div>
+                          <h4 className="font-medium text-gray-900 mb-2">Continuous Learning</h4>
+                          <p className="text-sm text-gray-600">System learns and improves performance over time</p>
+                        </div>
                       </div>
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <span className="text-purple-600 font-bold">2</span>
-                        </div>
-                        <h4 className="font-medium text-gray-900 mb-2">Smart Optimization</h4>
-                        <p className="text-sm text-gray-600">Algorithms optimize for your specific goals</p>
+                    </div>
+
+                    {/* Detailed Features Section */}
+                    <div className="p-6 bg-white border border-gray-200 rounded-xl shadow-sm">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-6">Advanced Capabilities</h3>
+                      <div className="space-y-6">
+                        {feature.detailedFeatures?.map((detailFeature, detailIndex) => (
+                          <div key={detailIndex} className="border-l-4 border-blue-500 pl-6">
+                            <h4 className="text-lg font-medium text-gray-900 mb-2">{detailFeature.title}</h4>
+                            <p className="text-gray-600 mb-3">{detailFeature.description}</p>
+                            <div className="flex flex-wrap gap-2">
+                              {detailFeature.techSpecs.map((spec, specIndex) => (
+                                <span key={specIndex} className="px-3 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded-full">
+                                  {spec}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                      <div className="text-center">
-                        <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                          <span className="text-green-600 font-bold">3</span>
+                    </div>
+
+                    {/* Technical Specifications */}
+                    <div className="p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl">
+                      <h3 className="text-xl font-semibold text-gray-900 mb-4">Technical Specifications</h3>
+                      <div className="grid md:grid-cols-2 gap-4">
+                        <div>
+                          <h4 className="font-medium text-gray-900 mb-2">Performance</h4>
+                          <ul className="text-sm text-gray-600 space-y-1">
+                            <li>• Real-time processing (  response)</li>
+                            <li>• 99.9% uptime guarantee</li>
+                            <li>• Scalable to millions of data points</li>
+                          </ul>
                         </div>
-                        <h4 className="font-medium text-gray-900 mb-2">Continuous Learning</h4>
-                        <p className="text-sm text-gray-600">System learns and improves performance over time</p>
+                        <div>
+                          <h4 className="font-medium text-gray-900 mb-2">Integration</h4>
+                          <ul className="text-sm text-gray-600 space-y-1">
+                            <li>• RESTful API endpoints</li>
+                            <li>• Webhook support</li>
+                            <li>• SDK for major platforms</li>
+                          </ul>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -288,7 +447,7 @@ const FeaturesPage = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {additionalFeatures.map((category, index) => (
-              <div key={index} className="card">
+              <div key={index} className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
                 <h3 className="text-lg font-semibold text-gray-900 mb-4">{category.category}</h3>
                 <ul className="space-y-2">
                   {category.features.map((feature, featureIndex) => (
@@ -334,10 +493,9 @@ const FeaturesPage = () => {
           </div>
         </div>
       </section>
-
-
     </div>
   )
 }
+
 
 export default FeaturesPage

@@ -271,26 +271,26 @@ const ConnectAccount = () => {
   ).length;
 
   return (
-    <div className="min-h-screen bg-gray-50" style={{ fontFamily: 'Exo, sans-serif' }}>
+    <div className="min-h-screen bg-gray-50 w-full" style={{ fontFamily: 'Exo, sans-serif' }}>
       <div className="flex h-screen">
         {/* Sidebar */}
-        <Sidebar />
+     
 
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {/* Header */}
-          <Header />
+        
+        
           
           {/* Page Header */}
-          <div className="bg-white border-b border-gray-200 shadow-sm">
-            <div className="max-w-7xl mx-auto px-6 py-5">
+          <div className=" shadow-sm">
+            <div className="max-w-8xl mx-auto px-2 py-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
                   <button className="flex items-center text-gray-500 hover:text-gray-700 transition-colors">
                     <span className="mr-2 text-lg">←</span>
                     <span className="font-medium">Back</span>
                   </button>
-                  <div className="h-6 w-px bg-gray-300"></div>
+                  <div className="h-6 w- bg-gray-300"></div>
                   <h1 className="text-2xl font-semibold text-gray-900">Connect Accounts</h1>
                 </div>
                 <div className="text-sm text-gray-500">

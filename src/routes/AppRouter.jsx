@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from '../utils/ErrorBoundary.jsx';
 import MainLayout from '../layouts/MainLayout.jsx';
 import LandingPage from '../pages/Landing-page.jsx';
@@ -12,55 +12,42 @@ import ConnectAccount from '../pages/accounts/Accounts-main.jsx';
 import ConnectGoogleAdsButton from '../pages/accounts/connect.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import Login from '../pages/auth/Login.jsx';
-
+import DashboardLayout from '../layouts/DashboardLayout.jsx';
 
 function AppRouter() {
   return (
-  
-        <ErrorBoundary>
-          <Router>
-            <MainLayout>
-              <div className="min-h-screen bg-gray-50">
-                <Routes>
-                  {/* Public Routes */}
-                  <Route path="/" element={<LandingPage />} />
-                  <Route path="/features" element={<FeaturesPage />} />
-                  <Route path="/pricing" element={<PricingPage />} />
-                  <Route path="/about" element={<AboutPage />} />
-                  <Route path="/about-company" element={<AboutCompanyPage />} />
-                  <Route path="/contact" element={<ContactPage />} />
-                    <Route path="/login" element={<Login/>}/>
+    <ErrorBoundary>
+      <Router>
+        <div className="min-h-screen bg-gray-50">
+          <Routes>
+            {/* Public Routes with MainLayout */}
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/features" element={<FeaturesPage />} />
+              <Route path="pricing" element={<PricingPage />} />
+              <Route path="/about" element={<AboutPage />} />
+              <Route path="/about-company" element={<AboutCompanyPage />} />
+              <Route path="/contact" element={<ContactPage />} />
+              <Route path="/login" element={<Login />} />
+            </Route>
 
-                  {/* Protected Dashboard Routes */}
-                  
-                  <Route
-                    path="/dashboard"
-                    element={
-                      <ProtectedRoute>
-                        <Dashboard />
-                      </ProtectedRoute>
-                    }
-                  >
-                    <Route index element={<Navigate to="/dashboard" replace />} />
-                    <Route path="dashboard" element={<Dashboard />} />
-                    {/* <Route path="analytics" element={<Analytics />} />
-                    <Route path="ai-creation" element={<AICreation />} />
-                    <Route path="performance" element={<Performance />} />
-                    <Route path="leads" element={<LeadsCRM />} />
-                    <Route path="billing" element={<Billing />} />
-                    <Route path="settings" element={<Settings />} /> */}
-
-                  
-
-             <Route path="workspace-connect" element={<ConnectAccount/>}/>
-            <Route path="connect" element={<ConnectGoogleAdsButton/>}/>
-                  </Route>
-                </Routes>
-              </div>
-            </MainLayout>
-          </Router>
-        </ErrorBoundary>
-    
+            {/* Protected Dashboard Routes */}
+            <Route
+  path="/dashboard"
+  element={
+    <ProtectedRoute>
+      <DashboardLayout/> {/* layout with sidebar & header */}
+    </ProtectedRoute>
+  }
+>
+  <Route index element={<Dashboard />} /> {/* default dashboard landing */}
+  <Route path="workspace-connect" element={<ConnectAccount />} />
+  <Route path="connect" element={<ConnectGoogleAdsButton />} />
+</Route>
+          </Routes>
+        </div>
+      </Router>
+    </ErrorBoundary>
   );
 }
 

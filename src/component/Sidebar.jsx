@@ -27,7 +27,7 @@ const Sidebar = () => {
       icon: (<MdWorkspacePremium/>),
       label: 'My Workspaces',
       hasNew: true,
-      to: '/workspace-connect',
+      to: '/dashboard/workspace-connect',
     },
     {
       icon: (<MdOutlineRocketLaunch/>),
@@ -85,7 +85,7 @@ const Sidebar = () => {
             {isCollapsed ? (
               <span className="text-purple-600">M</span>
             ) : (
-              <>MARTECKO <span className="text-purple-600">°</span></>
+              <>Modulus.ai <span className="text-purple-600">°</span></>
             )}
           </h1>
         </div>
