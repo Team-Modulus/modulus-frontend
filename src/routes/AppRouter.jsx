@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from '../utils/ErrorBoundary.jsx';
 import MainLayout from '../layouts/MainLayout.jsx';
-import LandingPage from '../pages/Landing-page.jsx';
+
 import FeaturesPage from '../pages/Featurepage.jsx';
 import PricingPage from '../pages/Pricing-page.jsx';
 import AboutPage from '../pages/AboutPage.jsx';
@@ -13,6 +13,7 @@ import ConnectGoogleAdsButton from '../pages/accounts/connect.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
 import Login from '../pages/auth/Login.jsx';
 import DashboardLayout from '../layouts/DashboardLayout.jsx';
+import LandingPage from '../pages/home/LandingPage.jsx';
 
 function AppRouter() {
   return (
@@ -22,7 +23,7 @@ function AppRouter() {
           <Routes>
             {/* Public Routes with MainLayout */}
             <Route element={<MainLayout />}>
-              <Route path="/" element={<LandingPage />} />
+              <Route path="/" element={<LandingPage/>} />
               <Route path="/features" element={<FeaturesPage />} />
               <Route path="pricing" element={<PricingPage />} />
               <Route path="/about" element={<AboutPage />} />
