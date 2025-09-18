@@ -1,9 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import ErrorBoundary from '../utils/ErrorBoundary.jsx';
 import MainLayout from '../layouts/MainLayout.jsx';
-
-import FeaturesPage from '../pages/Featurepage.jsx';
-import PricingPage from '../pages/Pricing-page.jsx';
 import AboutPage from '../pages/AboutPage.jsx';
 import AboutCompanyPage from '../pages/AboutCompany.jsx';
 import ContactPage from '../pages/ContactPage.jsx';
@@ -14,6 +11,8 @@ import ProtectedRoute from './ProtectedRoute.jsx';
 import Login from '../pages/auth/Login.jsx';
 import DashboardLayout from '../layouts/DashboardLayout.jsx';
 import LandingPage from '../pages/home/LandingPage.jsx';
+import PricingPage from '../pages/pricing/PricingPage.jsx';
+import FeaturesPage from '../pages/features/FeaturePage.jsx';
 
 function AppRouter() {
   return (
