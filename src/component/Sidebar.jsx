@@ -23,29 +23,47 @@ const Sidebar = () => {
       hasNew: false,
       to: '/dashboard',
     },
+      {
+      icon: (<LuLayoutDashboard/>),
+      label: 'Campaign Overview',
+      hasNew: false,
+      to: 'overview',
+    },
     {
       icon: (<MdWorkspacePremium/>),
       label: 'My Workspaces',
       hasNew: true,
-      to: '/dashboard/workspace-connect',
+      to: 'workspace-connect',
     },
     {
       icon: (<MdOutlineRocketLaunch/>),
-      label: 'Boost',
+      label: 'performance',
       hasNew: false,
-      to: '#',
+      to: 'performance',
     },
     {
       icon: (<GoGraph/>),
-      label: 'P&L Tracker',
+      label: 'Leads',
       hasNew: false,
-      to: '#',
+      to: 'leads',
+    },
+     {
+      icon: (<GoGraph/>),
+      label: 'Ai Ad',
+      hasNew: false,
+      to: 'ads-creation',
+    },
+     {
+      icon: (<GoGraph/>),
+      label: 'Billing',
+      hasNew: false,
+      to: 'billing',
     },
     {
       icon: (<MdOutlineSettings/>),
       label: 'Control Panel',
       hasNew: false,
-      to: '#',
+      to: 'settings',
     }
   ];
 
@@ -90,7 +108,7 @@ const Sidebar = () => {
           </h1>
         </div>
 
-        <nav className="flex-1 p-4 space-y-4">
+        <nav className="flex-1 p-2 space-y-2">
           {menuItems.map((item, index) => (
             <Link key={index} to={item.to} className="flex items-center p-3  text-gray-700 hover:bg-gray-200 rounded-md transition duration-200">
               {item.icon}

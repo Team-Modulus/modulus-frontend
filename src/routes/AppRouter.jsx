@@ -13,6 +13,13 @@ import FeaturesPage from '../pages/features/FeaturePage.jsx';
 import AboutPage from '../pages/about/AboutPage.jsx';
 import ContactPage from '../pages/contact/ContactPage.jsx';
 import  GetStartedPage from '../pages/GetStarted.jsx';
+import Settings from '../pages/dashboard/Settings.jsx';
+import CampaignOverview from '../pages/dashboard/CampaignOverview.jsx';
+import Analytics from '../pages/dashboard/Analytics.jsx';
+import Performance from '../pages/dashboard/Performance.jsx';
+import Billing from '../pages/dashboard/Billing.jsx';
+import LeadsCRM from '../pages/dashboard/LeadsCRM.jsx';
+import AICreation from '../pages/dashboard/AICreation.jsx';
 
 function AppRouter() {
   return (
@@ -28,6 +35,7 @@ function AppRouter() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage/>} />
                 <Route path="/get-started" element={<GetStartedPage />} />
+                 
               <Route path="/login" element={<Login />} />
             </Route>
 
@@ -43,6 +51,13 @@ function AppRouter() {
   <Route index element={<Dashboard />} /> {/* default dashboard landing */}
   <Route path="workspace-connect" element={<ConnectAccount />} />
   <Route path="connect" element={<ConnectGoogleAdsButton />} />
+   <Route path="settings" element={<Settings />} />
+    <Route path="overview" element={<CampaignOverview />} />
+    <Route path="analytics" element={<Analytics />} />
+    <Route path="performance" element={<Performance />} />
+    <Route path="billing" element={<Billing />} />
+     <Route path="leads" element={<LeadsCRM />} />
+        <Route path="ads-creation" element={<AICreation />} />
 </Route>
           </Routes>
         </div>
