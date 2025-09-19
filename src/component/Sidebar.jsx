@@ -121,7 +121,7 @@ const Sidebar = () => {
             </Link>
           ))}
           <div className={`mt-auto pt-4 ${isCollapsed ? 'hidden' : 'block'}`}>
-            <Link to="/workspace-connect">
+            <Link to="workspace-connect">
               <button className="w-full py-2 bg-black text-white rounded-md hover:bg-indigo-800 transition duration-300">Connect</button>
             </Link>
           </div>

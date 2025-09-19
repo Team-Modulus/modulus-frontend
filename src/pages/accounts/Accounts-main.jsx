@@ -286,10 +286,10 @@ const ConnectAccount = () => {
             <div className="max-w-8xl mx-auto px-2 py-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <button className="flex items-center text-gray-500 hover:text-gray-700 transition-colors">
+                  {/* <button className="flex items-center text-gray-500 hover:text-gray-700 transition-colors">
                     <span className="mr-2 text-lg">←</span>
                     <span className="font-medium">Back</span>
-                  </button>
+                  </button> */}
                   <div className="h-6 w- bg-gray-300"></div>
                   <h1 className="text-2xl font-semibold text-gray-900">Connect Accounts</h1>
                 </div>
