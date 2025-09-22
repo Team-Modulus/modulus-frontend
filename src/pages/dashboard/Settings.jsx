@@ -1,15 +1,28 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 
 const Settings = () => {
-  const [activeTab, setActiveTab] = useState("profile")
+const location = useLocation()
+console.log(location);
+
+//   const initialTab = location.state?.tab || "profile"
+//   console.log(initialTab,"tabbbb");
+  
+  const [activeTab, setActiveTab] = useState("account")
   const [notifications, setNotifications] = useState({
     email: true,
     push: false,
     sms: false,
     marketing: true,
   })
+
+  useEffect(() => {
+    if (location.state?.tab) {
+      setActiveTab(location.state.tab)
+    }
+  }, [location.state])
 
   const tabs = [
     { id: "profile", name: "Profile", icon: "👤" },
