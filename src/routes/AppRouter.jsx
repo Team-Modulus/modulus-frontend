@@ -20,6 +20,7 @@ import Performance from '../pages/dashboard/Performance.jsx';
 import Billing from '../pages/dashboard/Billing.jsx';
 import LeadsCRM from '../pages/dashboard/LeadsCRM.jsx';
 import AICreation from '../pages/dashboard/AICreation.jsx';
+import Dash from '../pages/dashboard/Dash-landing.jsx';
 
 function AppRouter() {
   return (
@@ -48,7 +49,9 @@ function AppRouter() {
     </ProtectedRoute>
   }
 >
-  <Route index element={<Dashboard />} /> {/* default dashboard landing */}
+  {/* <Route index element={<Dashboard />} />  */}
+  {/* default dashboard landing */}
+   <Route index element={<Dash />} /> 
   <Route path="workspace-connect" element={<ConnectAccount />} />
   <Route path="connect" element={<ConnectGoogleAdsButton />} />
    <Route path="settings" element={<Settings />} />
