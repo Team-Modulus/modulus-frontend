@@ -38,7 +38,7 @@ const Sidebar = () => {
       to: "workspace-connect",
       hasNew: true,
       children: [
-        { icon: <BsGraphUpArrow />, label: "Perfomance", to: "perfomance" },
+        { icon: <BsGraphUpArrow />, label: "Perfomance", to: "marketing-perfomance" },
         { icon:<SlSocialFacebook/>,label: "Social Media", to: "social-media" },
          { icon:<GrEmptyCircle/>,label: "Campaign", to: "campaign" },
       ],

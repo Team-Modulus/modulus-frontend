@@ -21,6 +21,9 @@ import Billing from '../pages/dashboard/Billing.jsx';
 import LeadsCRM from '../pages/dashboard/LeadsCRM.jsx';
 import AICreation from '../pages/dashboard/AICreation.jsx';
 import Dash from '../pages/dashboard/Dash-landing.jsx';
+import MarketingPerformance from '../pages/dashboard/MarketingPerformance.jsx';
+import SocialMedia from '../pages/dashboard/SocialMedia.jsx';
+import CampaignManagement from '../pages/dashboard/CampaignPage.jsx';
 
 function AppRouter() {
   return (
@@ -52,7 +55,13 @@ function AppRouter() {
   {/* <Route index element={<Dashboard />} />  */}
   {/* default dashboard landing */}
    <Route index element={<Dash />} /> 
+   <Route path='marketing-perfomance' element={<MarketingPerformance/>} />
+     <Route path='social-media' element={<SocialMedia/>} />
+     <Route path='campaign' element={<CampaignManagement/>}/>
+
+
   <Route path="workspace-connect" element={<ConnectAccount />} />
+  
   <Route path="connect" element={<ConnectGoogleAdsButton />} />
    <Route path="settings" element={<Settings />} />
     <Route path="overview" element={<CampaignOverview />} />
