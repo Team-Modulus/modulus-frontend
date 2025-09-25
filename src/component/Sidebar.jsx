@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { GoHome } from "react-icons/go";
-import { GrAnnounce, GrEmptyCircle } from "react-icons/gr";
+import { GrAnnounce, GrEmptyCircle, GrIntegration } from "react-icons/gr";
 import { IoCall, IoPersonOutline, IoReload } from "react-icons/io5";
 import { CiShoppingCart } from "react-icons/ci";
 import { BsBoxSeam, BsBuilding, BsGraphUpArrow, BsPersonAdd } from "react-icons/bs";
 import { FiBarChart, FiDollarSign } from "react-icons/fi";
-import { MdOutlineSettings, MdOutlineSupport, MdOutlineHelp } from "react-icons/md";
+import { MdOutlineSettings, MdOutlineSupport, MdOutlineHelp, MdAccountCircle } from "react-icons/md";
 import { Link } from "react-router-dom";
 import { SlSocialFacebook } from "react-icons/sl";
 import { LuBoxes } from "react-icons/lu";
 import { PiChartLineDown, PiChartLineUp } from "react-icons/pi";
 import { RiMoneyDollarBoxLine } from "react-icons/ri";
+import { FaTeamspeak } from "react-icons/fa";
+import { CardSimIcon, Database } from "lucide-react";
 const Sidebar = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -70,7 +72,7 @@ const Sidebar = () => {
       to: "settings",
       hasNew: false,
       children: [
-        { icon:<LuBoxes/>,label: "Inventory", to: "Inventory" },
+        { icon:<LuBoxes/>,label: "Inventory", to: "inventory" },
         {  icon:<BsBuilding/>,label: "Vendors", to: "vendors" },
       ],
     },
@@ -80,10 +82,10 @@ const Sidebar = () => {
       to: "",
       hasNew: false,
       children: [
-     {  icon:<PiChartLineUp/>,label: "Revenue", to: "vendors" },
-         {  icon:<RiMoneyDollarBoxLine/>,label: "P&L", to: "vendors" },
-          {  icon:<PiChartLineDown/>,label: "Expenses", to: "vendors" },
-           {  icon:<BsBuilding/>,label: "Forecasting", to: "vendors" },
+     {  icon:<PiChartLineUp/>,label: "Revenue", to: "revenue" },
+         {  icon:<RiMoneyDollarBoxLine/>,label: "P&L", to: "p&l" },
+          {  icon:<PiChartLineDown/>,label: "Expenses", to: "expenses" },
+           {  icon:<BsBuilding/>,label: "Forecasting", to: "forecasting" },
       ],
     },
     {
@@ -92,8 +94,11 @@ const Sidebar = () => {
       to: "settings",
       hasNew: false,
     children: [
-  { label: "Account Settings", to: "settings", state: { tab: "account" } },
-  { label: "Integrations", to: "settings", state: { tab: "integrations" } },
+  {  icon:<MdAccountCircle/>,label: "Account Settings", to: "settings"},
+  {  icon:<GrIntegration/>,label: "Integrations", to: "integration"},
+   {  icon:<FaTeamspeak/>,label: "Team", to: "team"},
+    {  icon:<CardSimIcon/>,label: "Billing", to: "billing" },
+     { icon:<Database/>, label: "Data", to: "data" }
 ],
     },
   ];
