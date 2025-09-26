@@ -1,18 +1,41 @@
 import { useState } from 'react';
 import { BarChart3, Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios"
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+    const [error, setError] = useState("");
   const navigate = useNavigate()
 
-  const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle sign in logic here
-    console.log('Sign in attempt with:', { email, password, rememberMe });
+
+    try {
+      const res = await axios.post("http://localhost:5000/api/auth/login", {
+        email,
+        password,
+      });
+
+      // Save token to localStorage or sessionStorage
+      const { token, user } = res.data;
+      if (rememberMe) {
+        localStorage.setItem("token", token);
+      } else {
+        sessionStorage.setItem("token", token);
+      }
+
+      console.log("Login successful:", user);
+
+      // Redirect to dashboard
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Login error:", err.response?.data || err.message);
+      setError(err.response?.data?.msg || "Invalid credentials");
+    }
   };
 
   const handleSignUp = () => {

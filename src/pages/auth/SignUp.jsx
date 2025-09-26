@@ -76,14 +76,32 @@ export default function SignUpFlow() {
     if (step > 1) setStep(step - 1);
   };
 
-  const handleCreateAccount = () => {
-    console.log('Creating account with:', {
-      ...formData,
-      selectedPlatforms,
-      agreedToTerms,
-      subscribeToUpdates
+const handleCreateAccount = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        ...formData,
+        selectedPlatforms,
+        agreedToTerms,
+        subscribeToUpdates,
+      }),
     });
-  };
+
+    if (!response.ok) {
+      throw new Error("Failed to create account");
+    }
+
+    const data = await response.json();
+    console.log("Account created successfully:", data);
+  } catch (error) {
+    console.error("Error creating account:", error);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
