@@ -5,7 +5,7 @@ import MainLayout from '../layouts/MainLayout.jsx';
 // import ConnectAccount from '../pages/accounts/Accounts-main.jsx';
 import ConnectGoogleAdsButton from '../pages/accounts/connect.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
-import Login from '../pages/auth/Login.jsx';
+// import Login from '../pages/auth/Login.jsx';
 import DashboardLayout from '../layouts/DashboardLayout.jsx';
 import LandingPage from '../pages/home/LandingPage.jsx';
 import PricingPage from '../pages/pricing/PricingPage.jsx';
@@ -31,6 +31,8 @@ import IntegrationsPage from '../pages/dashboard/account/Integrations.jsx';
 import TeamManagement from '../pages/dashboard/account/TeamMangement.jsx';
 import BillingSubscription from '../pages/dashboard/account/Billing.jsx';
 import DataManagementPage from '../pages/dashboard/account/DataManagement.jsx';
+import SignInPage from '../pages/auth/LoginPage.jsx';
+import SignUpFlow from '../pages/auth/SignUp.jsx';
 
 function AppRouter() {
   return (
@@ -47,7 +49,8 @@ function AppRouter() {
               <Route path="/contact" element={<ContactPage/>} />
                 <Route path="/get-started" element={<GetStartedPage />} />
                  
-              <Route path="/login" element={<Login />} />
+              <Route path="/login" element={<SignInPage/>} />
+              <Route path="/signup" element={<SignUpFlow/>} />
             </Route>
 
             {/* Protected Dashboard Routes */}

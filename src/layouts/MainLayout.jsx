@@ -4,7 +4,7 @@ import Footer from "../component/common/Footer";
 
 function MainLayout() {
   const location = useLocation();
-  const hideHeaderFooter = location.pathname === "/login";
+  const hideHeaderFooter = ["/login", "/signup"].includes(location.pathname);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-gray-900">
