@@ -57,9 +57,9 @@ const handleSubmit = async (e) => {
 
       const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.msg || data.message || "Invalid credentials");
-      }
+      // if (!res.ok) {
+      //   throw new Error(data.msg || data.message || "Invalid credentials");
+      // }
 
       const { token, user } = data;
 
