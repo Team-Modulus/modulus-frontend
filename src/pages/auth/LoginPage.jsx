@@ -96,6 +96,34 @@ const handleSubmit = async (e) => {
     }
   };
 
+
+   const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+
+      // Get user info
+      const user = result.user;
+      const { displayName, email, uid } = user;
+
+      // Optional: send user info to your backend to create/update user & get JWT
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/google-login`, {
+        name: displayName,
+        email,
+        firebaseUid: uid,
+      });
+
+      // Backend returns token + user data
+      const { token, user: backendUser } = res.data;
+
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", JSON.stringify(backendUser));
+
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Google login error:", err);
+    }
+  };
+
   const handlePasswordChange = (value) => {
     setPassword(value);
     if (errors.password) {
