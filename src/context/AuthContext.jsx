@@ -8,7 +8,7 @@ export const mainContext = createContext();
 
 export const MainProvider = ({ children }) => {
   const [token, setToken] = useState(() => localStorage.getItem('token') || '');
-  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')) || {});
+  const [user, setUser] = useState(() => JSON.parse(localStorage.getItem('user')) || "");
 
   // On mount, check for token in URL (e.g., after Google OAuth redirect)
   React.useEffect(() => {
@@ -28,11 +28,11 @@ export const MainProvider = ({ children }) => {
   const fetchUserDetails = async () => {
     if (!token) return; // Don't fetch if there is no token
     try {
-      const response = await axios.get(`https://modulus-odn4.vercel.app/api/auth/userDetails`, {
+      const response = await axios.get(`http://localhost:5000/api/auth/userDetails`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
-      setUser(response.data.user);
+      setUser(response.data.user||null);
       localStorage.setItem('user', JSON.stringify(response.data.user));
     } catch (error) {
       console.error('Error fetching user details:', error);
@@ -47,7 +47,7 @@ export const MainProvider = ({ children }) => {
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      setUser({});
+      setUser(null);
     }
   }, [token]);
 
@@ -58,6 +58,8 @@ export const MainProvider = ({ children }) => {
     setToken('');
     setUser({});
   };
+  console.log("user",user);
+  
 
   return (
     <mainContext.Provider value={{ token, setToken, user, setUser, signOut, fetchUserDetails }}>

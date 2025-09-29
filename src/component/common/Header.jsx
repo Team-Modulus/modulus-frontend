@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext, useState } from "react"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { mainContext } from "../../context/AuthContext"
 
 
@@ -9,6 +9,7 @@ const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { user, login } = useContext(mainContext)
   const location = useLocation()
+  const navigate = useNavigate()
 
   const navigation = [
     { name: "Features", href: "/features" },
@@ -18,8 +19,7 @@ const Header = () => {
   ]
 
   const handleLogin = async () => {
-    // Simple demo login
-    await login("demo@example.com", "password")
+   navigate("/login")
   }
 
   return (
@@ -53,12 +53,12 @@ const Header = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center space-x-4">
-              <Link
+              {/* <Link
                 to="/login"
                 className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
               >
                 login-page
-              </Link>
+              </Link> */}
             {user ? (
               <Link
                 to="/dashboard"

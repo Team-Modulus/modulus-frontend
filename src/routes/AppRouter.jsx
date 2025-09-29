@@ -33,6 +33,7 @@ import BillingSubscription from '../pages/dashboard/account/Billing.jsx';
 import DataManagementPage from '../pages/dashboard/account/DataManagement.jsx';
 import SignInPage from '../pages/auth/LoginPage.jsx';
 import SignUpFlow from '../pages/auth/SignUp.jsx';
+import PublicRoute from './PublicRoute.jsx';
 
 function AppRouter() {
   return (
@@ -41,7 +42,7 @@ function AppRouter() {
         <div className="min-h-screen bg-gray-50">
           <Routes>
             {/* Public Routes with MainLayout */}
-            <Route element={<MainLayout />}>
+            <Route element={<PublicRoute> <MainLayout /></PublicRoute>}>
               <Route path="/" element={<LandingPage/>} />
               <Route path="/features" element={<FeaturesPage />} />
               <Route path="pricing" element={<PricingPage />} />
@@ -81,15 +82,9 @@ function AppRouter() {
                <Route path="integration" element={< IntegrationsPage/>} />
 
 
-  {/* <Route path="workspace-connect" element={<ConnectAccount />} /> */}
   
   <Route path="connect" element={<ConnectGoogleAdsButton />} />
-   {/* <Route path="settings" element={<Settings />} />
-    <Route path="overview" element={<CampaignOverview />} />
-    <Route path="performance" element={<Performance />} />
-    <Route path="billing" element={<Billing />} /> */}
-     {/* <Route path="leads" element={<LeadsCRM />} /> */}
-        {/* <Route path="ads-creation" element={<AICreation />} /> */}
+
 </Route>
           </Routes>
         </div>
