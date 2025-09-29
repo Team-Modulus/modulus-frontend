@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { mainContext } from '../../context/AuthContext';
 import {Link, useNavigate} from "react-router-dom"
 import API from '../../constants/Api';
+import axios from 'axios';
 
 export default function SignUpFlow() {
   const [step, setStep] = useState(1);
@@ -174,57 +175,47 @@ export default function SignUpFlow() {
     }
   };
 
-   const handleCreateAccount = async () => {
-    if (!validateStep3()) return;
+ const handleCreateAccount = async () => {
+  if (!validateStep3()) return;
 
-    setIsLoading(true);
-    setApiError('');
-
-    try {
-      const response = await fetch(API.auth.register, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ...formData,
-          selectedPlatforms,
-          agreedToTerms,
-          subscribeToUpdates,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.msg || data.message || "Failed to create account");
-      }
-
-      // ✅ Set user and token in state
-      setUser(JSON.stringify(data.user) || null);
-      setToken(data.token || '');
-
-      // ✅ Store in localStorage
-      // localStorage.setItem("user", JSON.stringify(data.user || {}));
-      // localStorage.setItem("token", data.token || '');
-
-      // ✅ Navigate to dashboard
-      setFormData({ firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    companyName: '',
-    industry: '',
-    annualRevenue: ''})
-      navigate("/dashboard");
+  setIsLoading(true);
+  setApiError("");
 
 
-      console.log("Account created successfully:", data);
-    } catch (error) {
-      console.error("Error creating account:", error);
-      setApiError(error.message || "An error occurred while creating your account. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  try {
+    const { data } = await axios.post(API.auth.register, {
+      ...formData,
+      selectedPlatforms,
+      agreedToTerms,
+      subscribeToUpdates,
+    });
+
+    // ✅ Save user and token
+    setUser(data.user || null);
+    setToken(data.token || "");
+
+    localStorage.setItem("user", JSON.stringify(data.user || null));
+    localStorage.setItem("token", data.token || "");
+
+    // ✅ Navigate to dashboard (replace: true prevents back navigation to signup)
+    navigate("/dashboard", { replace: true });
+
+    console.log("Account created successfully:", data);
+  } catch (error) {
+    console.error("Error creating account:", error);
+
+    // axios error format → error.response.data
+    setApiError(
+      error.response?.data?.msg ||
+        error.response?.data?.message ||
+        error.message ||
+        "An error occurred while creating your account. Please try again."
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
     const handleBackToHome = () => {
     navigate("/");
@@ -634,7 +625,7 @@ export default function SignUpFlow() {
         </div>
       </div>
 
-      <style jsx>{`
+      <style >{`
         @keyframes gradient-shift {
           0%, 100% {
             opacity: 1;

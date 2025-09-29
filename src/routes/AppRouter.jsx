@@ -34,6 +34,7 @@ import DataManagementPage from '../pages/dashboard/account/DataManagement.jsx';
 import SignInPage from '../pages/auth/LoginPage.jsx';
 import SignUpFlow from '../pages/auth/SignUp.jsx';
 import PublicRoute from './PublicRoute.jsx';
+import AuthSuccess from '../pages/auth/AuthSuccess.jsx';
 
 function AppRouter() {
   return (
@@ -49,6 +50,7 @@ function AppRouter() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage/>} />
                 <Route path="/get-started" element={<GetStartedPage />} />
+                   <Route path="/success" element={<AuthSuccess />} />
                  
               <Route path="/login" element={<SignInPage/>} />
               <Route path="/signup" element={<SignUpFlow/>} />

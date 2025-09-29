@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { mainContext } from '../../context/AuthContext';
 import API from '../../constants/Api';
+import axios from 'axios';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -38,47 +39,47 @@ export default function SignInPage() {
     return Object.keys(newErrors).length === 0;
   };
 
+
 const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
-    setIsLoading(true);
-    setApiError('');
+  setIsLoading(true);
+  setApiError("");
 
-    try {
-      const res = await fetch(API.auth.login, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+  try {
+    const res = await axios.post(API.auth.login, {
+      email,
+      password,
+    });
 
-      const data = await res.json();
+    const { token, user } = res.data;
 
-      // if (!res.ok) {
-      //   throw new Error(data.msg || data.message || "Invalid credentials");
-      // }
+    // ✅ Save user and token in state
+    setUser(user || null);
+    setToken(token || "");
 
-      const { token, user } = data;
+    // ✅ Save in localStorage
+    localStorage.setItem("token", token || "");
+    localStorage.setItem("user", JSON.stringify(user || null));
 
-      setUser(JSON.stringify(user)||null)
-      setToken(token)
-   
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
-   
-    
-  
-      navigate("/dashboard");
-    } catch (err) {
-      console.error("Login error:", err.message);
-      setApiError(err.message || "Invalid email or password. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // ✅ Navigate to dashboard
+    navigate("/dashboard");
+
+    console.log("Login successful:", res.data);
+  } catch (err) {
+    console.error("Login error:", err.response?.data || err.message);
+
+    setApiError(
+      err.response?.data?.msg ||
+      err.response?.data?.message ||
+      "Invalid email or password. Please try again."
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
 
 
   const handleEmailChange = (value) => {
@@ -261,6 +262,7 @@ const handleSubmit = async (e) => {
               <button 
                 type="button"
                 disabled={isLoading}
+                onClick={() => window.location.href = `${API.auth.googleSignin}`}
                 className="flex items-center justify-center px-3 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
