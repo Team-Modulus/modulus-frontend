@@ -3,6 +3,7 @@ import { BarChart3, Eye, EyeOff, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import { mainContext } from '../../context/AuthContext';
+import API from '../../constants/Api';
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -46,7 +47,7 @@ const handleSubmit = async (e) => {
     setApiError('');
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const res = await fetch(API.auth.login, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

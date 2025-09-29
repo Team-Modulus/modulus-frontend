@@ -3,6 +3,7 @@ import { BarChart3, Eye, EyeOff, ChevronDown, ArrowLeft, Check, AlertCircle } fr
 import { useContext } from 'react';
 import { mainContext } from '../../context/AuthContext';
 import {Link, useNavigate} from "react-router-dom"
+import API from '../../constants/Api';
 
 export default function SignUpFlow() {
   const [step, setStep] = useState(1);
@@ -180,7 +181,7 @@ export default function SignUpFlow() {
     setApiError('');
 
     try {
-      const response = await fetch("http://localhost:5000/api/auth/register", {
+      const response = await fetch(API.auth.register, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
