@@ -19,6 +19,7 @@ const API = {
     login: `${BASE_URL}/auth/login`,
     register: `${BASE_URL}/auth/register`,
     logout: `${BASE_URL}/auth/logout`,
+    googlelogin: `${BASE_URL}/auth/google-login`,
     googleSignin:`${BASE_URL}/google-auth/google`
   },
   user: {

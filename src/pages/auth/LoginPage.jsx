@@ -5,6 +5,8 @@ import { useContext } from 'react';
 import { mainContext } from '../../context/AuthContext';
 import API from '../../constants/Api';
 import axios from 'axios';
+import { auth, provider, signInWithPopup } from "../../config/firebase";
+
 
 export default function SignInPage() {
   const [email, setEmail] = useState('');
@@ -104,9 +106,12 @@ const handleSubmit = async (e) => {
       // Get user info
       const user = result.user;
       const { displayName, email, uid } = user;
-
+   console.log(user,"firebase");
+   console.log("firedase display", displayName,email);
+   
+   
       // Optional: send user info to your backend to create/update user & get JWT
-      const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/google-login`, {
+      const res = await axios.post(API.auth.googlelogin, {
         name: displayName,
         email,
         firebaseUid: uid,
@@ -114,7 +119,8 @@ const handleSubmit = async (e) => {
 
       // Backend returns token + user data
       const { token, user: backendUser } = res.data;
-
+ setUser(backendUser || null);
+    setToken(token || "");
       localStorage.setItem("token", token);
       localStorage.setItem("user", JSON.stringify(backendUser));
 
@@ -290,7 +296,8 @@ const handleSubmit = async (e) => {
               <button 
                 type="button"
                 disabled={isLoading}
-                onClick={() => window.location.href = `${API.auth.googleSignin}`}
+                // onClick={() => window.location.href = `${API.auth.googleSignin}`}
+                onClick={handleGoogleLogin}
                 className="flex items-center justify-center px-3 py-2.5 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg className="w-4 h-4 mr-2" viewBox="0 0 24 24">
