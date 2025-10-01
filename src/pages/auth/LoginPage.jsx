@@ -6,6 +6,7 @@ import { mainContext } from '../../context/AuthContext';
 import API from '../../constants/Api';
 import axios from 'axios';
 import { auth, provider, signInWithPopup } from "../../config/firebase";
+import { FullPageLoader } from '../../utils/loader';
 
 
 export default function SignInPage() {
@@ -18,6 +19,7 @@ export default function SignInPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate()
   const {setUser,setToken} = useContext(mainContext)
+
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
@@ -99,36 +101,37 @@ const handleSubmit = async (e) => {
   };
 
 
-   const handleGoogleLogin = async () => {
-    try {
-      const result = await signInWithPopup(auth, provider);
+const handleGoogleLogin = async () => {
+  try {
+    setIsLoading(true); // show loader
 
-      // Get user info
-      const user = result.user;
-      const { displayName, email, uid } = user;
-   console.log(user,"firebase");
-   console.log("firedase display", displayName,email);
-   
-   
-      // Optional: send user info to your backend to create/update user & get JWT
-      const res = await axios.post(API.auth.googlelogin, {
-        name: displayName,
-        email,
-        firebaseUid: uid,
-      });
+    const result = await signInWithPopup(auth, provider);
 
-      // Backend returns token + user data
-      const { token, user: backendUser } = res.data;
- setUser(backendUser || null);
+    const user = result.user;
+    const { displayName, email, uid } = user;
+
+    const res = await axios.post(API.auth.googlelogin, {
+      name: displayName,
+      email,
+      firebaseUid: uid,
+    });
+
+    const { token, user: backendUser } = res.data;
+
+    setUser(backendUser || null);
     setToken(token || "");
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(backendUser));
 
-      navigate("/dashboard");
-    } catch (err) {
-      console.error("Google login error:", err);
-    }
-  };
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(backendUser));
+
+    navigate("/dashboard");
+  } catch (err) {
+    console.error("Google login error:", err);
+  } finally {
+    setIsLoading(false); // hide loader
+  }
+};
+
 
   const handlePasswordChange = (value) => {
     setPassword(value);
@@ -157,6 +160,9 @@ const handleSubmit = async (e) => {
   };
 
   return (
+    <>
+        {isLoading&& <FullPageLoader/>}
+
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
       {/* Animated Background Gradients */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -403,5 +409,6 @@ const handleSubmit = async (e) => {
         }
       `}</style>
     </div>
+    </>
   );
 }
