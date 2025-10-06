@@ -35,6 +35,8 @@ import SignInPage from '../pages/auth/LoginPage.jsx';
 import SignUpFlow from '../pages/auth/SignUp.jsx';
 import PublicRoute from './PublicRoute.jsx';
 import AuthSuccess from '../pages/auth/AuthSuccess.jsx';
+import PrivacyPolicy from '../pages/Privacy-Policy.jsx';
+import TermsAndConditions from '../pages/TermsAndCondition.jsx';
 
 function AppRouter() {
   return (
@@ -51,6 +53,10 @@ function AppRouter() {
               <Route path="/contact" element={<ContactPage/>} />
                 <Route path="/get-started" element={<GetStartedPage />} />
                    <Route path="/success" element={<AuthSuccess />} />
+                       
+              <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
+                  
+              <Route path="/terms-condition" element={<TermsAndConditions/>} />
                  
               <Route path="/login" element={<SignInPage/>} />
               <Route path="/signup" element={<SignUpFlow/>} />

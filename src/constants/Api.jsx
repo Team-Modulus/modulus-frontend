@@ -22,6 +22,12 @@ const API = {
     googlelogin: `${BASE_URL}/auth/google-login`,
     googleSignin:`${BASE_URL}/google-auth/google`
   },
+  Connect:{
+    fb:`${BASE_URL}/facebook/connect`,
+    status:`${BASE_URL}/facebook/status`,
+    status:`${BASE_URL}/facebook/status`
+
+  },
   user: {
     getAll: `${BASE_URL}/users`,
     getById: (id) => `${BASE_URL}/users/${id}`, 
