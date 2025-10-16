@@ -6,8 +6,8 @@
 //   production: "https://modulus-api.vercel.app/api",
 // };
 
-const BASE_URL ="http://localhost:5000/api"
-// const BASE_URL ="https://modulus-api.vercel.app/api"
+// const BASE_URL ="http://localhost:5000/api"
+const BASE_URL ="https://modulus-api.vercel.app/api"
 
 
 // Automatically pick environment
