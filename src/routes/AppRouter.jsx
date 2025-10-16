@@ -37,6 +37,7 @@ import PublicRoute from './PublicRoute.jsx';
 import AuthSuccess from '../pages/auth/AuthSuccess.jsx';
 import PrivacyPolicy from '../pages/Privacy-Policy.jsx';
 import TermsAndConditions from '../pages/TermsAndCondition.jsx';
+import UnifiedAuthPage from '../pages/auth/Auth.jsx';
 
 function AppRouter() {
   return (
@@ -57,9 +58,10 @@ function AppRouter() {
               <Route path="/privacy-policy" element={<PrivacyPolicy/>} />
                   
               <Route path="/terms-condition" element={<TermsAndConditions/>} />
+              <Route path="/auth" element={<UnifiedAuthPage/>} />
                  
-              <Route path="/login" element={<SignInPage/>} />
-              <Route path="/signup" element={<SignUpFlow/>} />
+              {/* <Route path="/login" element={<SignInPage/>} />
+              <Route path="/signup" element={<SignUpFlow/>} /> */}
             </Route>
 
             {/* Protected Dashboard Routes */}

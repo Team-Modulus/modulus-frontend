@@ -45,8 +45,9 @@ const Login = () => {
       if (!response.ok) {
         throw new Error(data.msg || 'Login failed');
       }
-      setToken(data.token);
       localStorage.setItem('token', data.token);
+      setToken(data.token);
+      
       
       // Redirect to dashboard or home page
       navigate('/dashboard');

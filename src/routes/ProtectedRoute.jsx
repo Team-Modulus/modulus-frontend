@@ -8,7 +8,7 @@ console.log("user",user);
 
 
   if (!user) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/auth" replace />;
   }
 
   return children;

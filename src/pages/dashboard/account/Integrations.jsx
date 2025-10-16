@@ -23,38 +23,35 @@ export default function IntegrationsPage() {
     stripe: false,
   });
   const [loading, setLoading] = useState(true);
+  console.log(integrations);
+  
 
   // ✅ Check connection status from backend
-  useEffect(() => {
-    const checkStatus = async () => {
-      try {
-        const res = await axios.get(API.Connect.status, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        });
+ useEffect(() => {
+  const checkStatus = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(API.Connect.status, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
 
-        // Example: backend sends { facebook: true, google: false, ... }
-        setIntegrations((prev) => ({
-          ...prev,
-          ...res.data, // overwrite with backend statuses
-        }));
-      } catch (err) {
-        console.error("Error checking integration status", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // Check once when page loads
-    checkStatus();
-
-    // ✅ Handle redirect success from OAuth (FB/Google)
-    const params = new URLSearchParams(window.location.search);
-    const success = params.get("success");
-    if (success) {
-      setIntegrations((prev) => ({ ...prev, [success]: true }));
-      window.history.replaceState({}, document.title, window.location.pathname);
+      // Backend only sends { isConnected: true } for FB
+      setIntegrations((prev) => ({
+        ...prev,
+        facebookAds: res.data.isConnected, // map response to correct key
+      }));
+    } catch (err) {
+      console.error("Error checking integration status", err);
+      setError("Failed to fetch integration status");
+    } finally {
+      setLoading(false);
     }
-  }, []);
+  };
+
+  checkStatus();
+}, []);
+
+
 
   // ✅ Facebook Connect
   const handleConnectFacebook = async () => {

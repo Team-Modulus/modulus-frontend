@@ -19,7 +19,7 @@ const Header = () => {
   ]
 
   const handleLogin = async () => {
-   navigate("/login")
+   navigate("/auth")
   }
 
   return (

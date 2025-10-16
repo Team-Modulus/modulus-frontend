@@ -117,13 +117,14 @@ const handleGoogleLogin = async () => {
     });
 
     const { token, user: backendUser } = res.data;
-
-    setUser(backendUser || null);
-    setToken(token || "");
-
-    localStorage.setItem("token", token);
+      localStorage.setItem("token", token);
     localStorage.setItem("user", JSON.stringify(backendUser));
 
+
+    setUser(backendUser || null);
+    setToken(token );
+
+  
     navigate("/dashboard");
   } catch (err) {
     console.error("Google login error:", err);
