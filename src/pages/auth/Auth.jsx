@@ -91,7 +91,7 @@ export default function UnifiedAuthPage() {
       
       // Save to localStorage first
       localStorage.setItem("token", token || "");
-      localStorage.setItem("user", JSON.stringify(user || null));
+      localStorage.setItem("user", JSON.stringify(user || {}));
       
       // Update state
       setUser(user || null);
@@ -137,7 +137,7 @@ export default function UnifiedAuthPage() {
 
       // Save to localStorage first
       localStorage.setItem("token", data.token || "");
-      localStorage.setItem("user", JSON.stringify(data.user || null));
+      localStorage.setItem("user", JSON.stringify(data.user || {}));
       
       // Update state
       setUser(data.user || null);
@@ -207,7 +207,7 @@ export default function UnifiedAuthPage() {
       
       // Save to localStorage first
       localStorage.setItem("token", token || "");
-      localStorage.setItem("user", JSON.stringify(backendUser || null));
+      localStorage.setItem("user", JSON.stringify(backendUser || {}));
       
       // Update state
       setUser(backendUser || null);
