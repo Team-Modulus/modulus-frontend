@@ -88,11 +88,32 @@ export default function UnifiedAuthPage() {
       });
 
       const { token, user } = res.data;
-      setUser(user || null);
-      setToken(token || "");
+      
+      // Save to localStorage first
       localStorage.setItem("token", token || "");
       localStorage.setItem("user", JSON.stringify(user || null));
-      navigate("/dashboard");
+      
+      // Update state
+      setUser(user || null);
+      setToken(token || "");
+      
+      // Force a small delay to ensure all operations complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Navigate with multiple fallback methods
+      try {
+        navigate("/dashboard", { replace: true });
+        
+        // Fallback navigation after a short delay
+        setTimeout(() => {
+          if (window.location.pathname !== "/dashboard") {
+            window.location.href = "/dashboard";
+          }
+        }, 500);
+      } catch (navError) {
+        console.error("Navigation error:", navError);
+        window.location.href = "/dashboard";
+      }
     } catch (err) {
       setApiError(
         err.response?.data?.msg ||
@@ -114,11 +135,31 @@ export default function UnifiedAuthPage() {
         subscribeToUpdates: false,
       });
 
+      // Save to localStorage first
+      localStorage.setItem("token", data.token || "");
+      localStorage.setItem("user", JSON.stringify(data.user || null));
+      
+      // Update state
       setUser(data.user || null);
       setToken(data.token || "");
-      localStorage.setItem("user", JSON.stringify(data.user || null));
-      localStorage.setItem("token", data.token || "");
-      navigate("/dashboard", { replace: true });
+      
+      // Force a small delay to ensure all operations complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Navigate with multiple fallback methods
+      try {
+        navigate("/dashboard", { replace: true });
+        
+        // Fallback navigation after a short delay
+        setTimeout(() => {
+          if (window.location.pathname !== "/dashboard") {
+            window.location.href = "/dashboard";
+          }
+        }, 500);
+      } catch (navError) {
+        console.error("Navigation error:", navError);
+        window.location.href = "/dashboard";
+      }
     } catch (error) {
       setApiError(
         error.response?.data?.msg ||
@@ -163,11 +204,32 @@ export default function UnifiedAuthPage() {
       });
 
       const { token, user: backendUser } = res.data;
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(backendUser));
+      
+      // Save to localStorage first
+      localStorage.setItem("token", token || "");
+      localStorage.setItem("user", JSON.stringify(backendUser || null));
+      
+      // Update state
       setUser(backendUser || null);
-      setToken(token);
-      navigate("/dashboard");
+      setToken(token || "");
+      
+      // Force a small delay to ensure all operations complete
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Navigate with multiple fallback methods
+      try {
+        navigate("/dashboard", { replace: true });
+        
+        // Fallback navigation after a short delay
+        setTimeout(() => {
+          if (window.location.pathname !== "/dashboard") {
+            window.location.href = "/dashboard";
+          }
+        }, 500);
+      } catch (navError) {
+        console.error("Navigation error:", navError);
+        window.location.href = "/dashboard";
+      }
     } catch (err) {
       console.error("Google auth error:", err);
       setApiError("Google authentication failed. Please try again.");
@@ -215,11 +277,11 @@ export default function UnifiedAuthPage() {
         <div className="flex flex-col items-center justify-center min-h-screen p-4 relative z-10">
           
           {/* Logo */}
-          <div className="flex items-center justify-center mb-6">
+          {/* <div className="flex items-center justify-center mb-6">
             <div className="flex items-center space-x-2">
               <span className="text-xl font-bold text-gray-900">Modulus.ai</span>
             </div>
-          </div>
+          </div> */}
 
           {/* Auth Form Container */}
           <div className="w-full max-w-sm">

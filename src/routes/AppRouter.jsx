@@ -46,7 +46,7 @@ function AppRouter() {
         <div className="min-h-screen bg-gray-50">
           <Routes>
             {/* Public Routes with MainLayout */}
-            <Route element={<MainLayout />}>
+            <Route element={<PublicRoute> <MainLayout /></PublicRoute>}>
               <Route path="/" element={<LandingPage/>} />
               <Route path="/features" element={<FeaturesPage />} />
               <Route path="pricing" element={<PricingPage />} />

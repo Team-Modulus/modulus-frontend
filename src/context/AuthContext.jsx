@@ -47,7 +47,7 @@ export const MainProvider = ({ children }) => {
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
-      setUser(null);
+      setUser("");
     }
   }, [token]);
 
