@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext } from 'react';
 import { Eye, EyeOff, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { mainContext } from '../../context/AuthContext';
@@ -17,83 +17,6 @@ export default function UnifiedAuthPage() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { setUser, setToken } = useContext(mainContext);
-  const redirectTimeoutRef = useRef(null);
-  const [shouldRedirect, setShouldRedirect] = useState(false);
-
-  // Robust navigation handler for Mac/Mobile compatibility
-  const performNavigation = (path = "/dashboard") => {
-    // Clear any existing timeout
-    if (redirectTimeoutRef.current) {
-      clearTimeout(redirectTimeoutRef.current);
-    }
-
-    // Detect platform for specific handling
-    const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const isMac = /Macintosh|MacIntel|MacPPC|Mac68K/i.test(navigator.userAgent);
-
-    // Strategy 1: Immediate React Router navigation
-    try {
-      navigate(path, { replace: true });
-    } catch (error) {
-      console.warn("React Router navigation failed:", error);
-    }
-
-    // Strategy 2: Platform-specific fallbacks with progressive timeouts
-    if (isSafari || isMobile || isMac) {
-      // More aggressive approach for Mac/Safari/Mobile
-      redirectTimeoutRef.current = setTimeout(() => {
-        try {
-          window.location.replace(path);
-        } catch (error) {
-          console.warn("window.location.replace failed:", error);
-          window.location.href = path;
-        }
-      }, 100);
-
-      // Additional fallback for stubborn cases
-      setTimeout(() => {
-        if (window.location.pathname !== path && window.location.pathname !== path + "/") {
-          try {
-            window.location.assign(path);
-          } catch (error) {
-            window.location.href = path;
-          }
-        }
-      }, 800);
-    } else {
-      // Standard fallback for other browsers
-      redirectTimeoutRef.current = setTimeout(() => {
-        if (window.location.pathname !== path) {
-          window.location.href = path;
-        }
-      }, 300);
-    }
-
-    // Final nuclear option for really stubborn cases
-    setTimeout(() => {
-      if (window.location.pathname !== path && window.location.pathname !== path + "/") {
-        window.location.href = path;
-      }
-    }, 2000);
-  };
-
-  // Handle redirect when shouldRedirect changes
-  useEffect(() => {
-    if (shouldRedirect) {
-      performNavigation("/dashboard");
-      setShouldRedirect(false);
-    }
-  }, [shouldRedirect]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (redirectTimeoutRef.current) {
-        clearTimeout(redirectTimeoutRef.current);
-      }
-    };
-  }, []);
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -168,17 +91,29 @@ export default function UnifiedAuthPage() {
       
       // Save to localStorage first
       localStorage.setItem("token", token || "");
-      localStorage.setItem("user", JSON.stringify(user || null));
+      localStorage.setItem("user", JSON.stringify(user || {}));
       
       // Update state
-      setUser(user || null);
+      setUser(user || {});
       setToken(token || "");
       
       // Force a small delay to ensure all operations complete
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise(resolve => setTimeout(resolve, 100));
       
-      // Trigger robust navigation
-      setShouldRedirect(true);
+      // Navigate with multiple fallback methods
+      try {
+        navigate("/dashboard", { replace: true });
+        
+        // Fallback navigation after a short delay
+        setTimeout(() => {
+          if (window.location.pathname !== "/dashboard") {
+            window.location.href = "/dashboard";
+          }
+        }, 500);
+      } catch (navError) {
+        console.error("Navigation error:", navError);
+        window.location.href = "/dashboard";
+      }
     } catch (err) {
       setApiError(
         err.response?.data?.msg ||
@@ -202,17 +137,29 @@ export default function UnifiedAuthPage() {
 
       // Save to localStorage first
       localStorage.setItem("token", data.token || "");
-      localStorage.setItem("user", JSON.stringify(data.user || null));
+      localStorage.setItem("user", JSON.stringify(data.user || {}));
       
       // Update state
-      setUser(data.user || null);
+      setUser(data.user || {});
       setToken(data.token || "");
       
       // Force a small delay to ensure all operations complete
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise(resolve => setTimeout(resolve, 100));
       
-      // Trigger robust navigation
-      setShouldRedirect(true);
+      // Navigate with multiple fallback methods
+      try {
+        navigate("/dashboard", { replace: true });
+        
+        // Fallback navigation after a short delay
+        setTimeout(() => {
+          if (window.location.pathname !== "/dashboard") {
+            window.location.href = "/dashboard";
+          }
+        }, 500);
+      } catch (navError) {
+        console.error("Navigation error:", navError);
+        window.location.href = "/dashboard";
+      }
     } catch (error) {
       setApiError(
         error.response?.data?.msg ||
@@ -260,17 +207,29 @@ export default function UnifiedAuthPage() {
       
       // Save to localStorage first
       localStorage.setItem("token", token || "");
-      localStorage.setItem("user", JSON.stringify(backendUser || null));
+      localStorage.setItem("user", JSON.stringify(backendUser || {}));
       
       // Update state
       setUser(backendUser || null);
       setToken(token || "");
       
       // Force a small delay to ensure all operations complete
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise(resolve => setTimeout(resolve, 100));
       
-      // Trigger robust navigation
-      setShouldRedirect(true);
+      // Navigate with multiple fallback methods
+      try {
+        navigate("/dashboard", { replace: true });
+        
+        // Fallback navigation after a short delay
+        setTimeout(() => {
+          if (window.location.pathname !== "/dashboard") {
+            window.location.href = "/dashboard";
+          }
+        }, 500);
+      } catch (navError) {
+        console.error("Navigation error:", navError);
+        window.location.href = "/dashboard";
+      }
     } catch (err) {
       console.error("Google auth error:", err);
       setApiError("Google authentication failed. Please try again.");
