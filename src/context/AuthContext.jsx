@@ -29,7 +29,7 @@ export const MainProvider = ({ children }) => {
   const fetchUserDetails = async () => {
     if (!token) return; // Don't fetch if there is no token
     try {
-      const response = await axios.get(API.userDetails, {
+      const response = await axios.get(API.auth.userDetails, {
         headers: { Authorization: `Bearer ${token}` },
       });
       
