@@ -27,29 +27,33 @@ export default function IntegrationsPage() {
   
 
   // ✅ Check connection status from backend
- useEffect(() => {
-  const checkStatus = async () => {
-    setLoading(true);
-    try {
-      const res = await axios.get(API.Connect.status, {
-        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-      });
-
-      // Backend only sends { isConnected: true } for FB
-      setIntegrations((prev) => ({
-        ...prev,
-        facebookAds: res.data.isConnected, // map response to correct key
-      }));
-    } catch (err) {
-      console.error("Error checking integration status", err);
-      setError("Failed to fetch integration status");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  checkStatus();
-}, []);
+  useEffect(() => {
+    const checkStatus = async () => {
+      setLoading(true);
+  
+      try {
+        const res = await axios.get(API.Connect.status, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        });
+  
+        const platforms = res?.data?.platforms || {};
+        setIntegrations((prev) => ({
+          ...prev,
+          googleAds: platforms.googleAds?.connected === true,
+          facebookAds: platforms.facebookAds?.connected === true,
+          // keep others as-is unless you add them to backend
+          // mailchimp, googleAnalytics, shopify, stripe remain unchanged
+        }));
+      } catch (err) {
+        console.error("Error checking integration status", err);
+     
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    checkStatus();
+  }, []);
 
 
 
