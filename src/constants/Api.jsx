@@ -26,8 +26,12 @@ const API = {
   Connect:{
     fb:`${BASE_URL}/facebook/connect`,
     status:`${BASE_URL}/facebook/status`,
-    status:`${BASE_URL}/facebook/status`
-
+    fbAds:`${BASE_URL}/facebook/ads`,
+    fbConnectAccount:`${BASE_URL}/facebook/connect-account`,
+    fbDisconnect:`${BASE_URL}/facebook/disconnect`,
+    fbInsights:`${BASE_URL}/facebook/insights`,
+    fbCampaigns:`${BASE_URL}/facebook/campaigns`,
+    fbfbRefreshInsights:`${BASE_URL}/facebook/refresh-insights`,
   },
   user: {
     getAll: `${BASE_URL}/users`,

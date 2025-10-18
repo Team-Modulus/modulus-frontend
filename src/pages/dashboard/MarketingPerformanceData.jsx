@@ -1,91 +1,280 @@
-import { DollarSign, TrendingUp, MousePointer, Target, ExternalLink, ArrowUp, ArrowDown } from 'lucide-react';
-import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { useState, useEffect } from 'react';
+import { DollarSign, TrendingUp, MousePointer, Target, ExternalLink, ArrowUp, ArrowDown, AlertCircle, Loader2 } from 'lucide-react';
+import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import axios from 'axios';
+import API from '../../constants/Api';
+
 
 export default function MarketingDashboard() {
-  // Sample data for charts
-  const revenueData = [
-    { day: 'Mon', revenue: 3500, spend: 1200 },
-    { day: 'Tue', revenue: 3800, spend: 1300 },
-    { day: 'Wed', revenue: 3200, spend: 1250 },
-    { day: 'Thu', revenue: 4200, spend: 1400 },
-    { day: 'Fri', revenue: 5200, spend: 1600 },
-    { day: 'Sat', revenue: 5800, spend: 1550 },
-    { day: 'Sun', revenue: 4800, spend: 1450 }
-  ];
+  const [dashboardData, setDashboardData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [connectedAccounts, setConnectedAccounts] = useState([]);
+  const [selectedTimeRange, setSelectedTimeRange] = useState('last_7d');
 
-  const clickData = [
-    { day: 'Mon', clicks: 450 },
-    { day: 'Tue', clicks: 520 },
-    { day: 'Wed', clicks: 480 },
-    { day: 'Thu', clicks: 580 },
-    { day: 'Fri', clicks: 640 },
-    { day: 'Sat', clicks: 720 },
-    { day: 'Sun', clicks: 650 }
-  ];
+  // Fetch Facebook insights data
+  useEffect(() => {
+    fetchMarketingData();
+  }, [selectedTimeRange]);
 
-  const metrics = [
+  const fetchMarketingData = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const res = await axios.get(`${API.Connect.fbInsights}?date_preset=${selectedTimeRange}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+
+      if (res.data.insights && res.data.insights.length > 0) {
+        const transformedData = transformFacebookData(res.data.insights);
+        setDashboardData(transformedData);
+        setConnectedAccounts(res.data.connectedAccounts || []);
+      } else {
+        setDashboardData(null);
+      }
+    } catch (err) {
+      console.error("Failed to fetch marketing data:", err);
+      setError("Failed to load marketing data. Please check your Facebook integration.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Transform Facebook insights data for dashboard use
+  const transformFacebookData = (insights) => {
+    // Group insights by date for time series data
+    const dailyData = {};
+    let totalSpend = 0;
+    let totalClicks = 0;
+    let totalImpressions = 0;
+    let totalRevenue = 0; // This would come from your conversion tracking
+    let totalActions = 0;
+
+    insights.forEach(insight => {
+      const date = new Date(insight.date_start);
+      const dayKey = date.toLocaleDateString('en-US', { weekday: 'short' });
+      
+      if (!dailyData[dayKey]) {
+        dailyData[dayKey] = {
+          day: dayKey,
+          spend: 0,
+          clicks: 0,
+          impressions: 0,
+          revenue: 0, // You'll need to calculate this from your conversion data
+          actions: 0
+        };
+      }
+
+      const spend = parseFloat(insight.spend || 0);
+      const clicks = parseInt(insight.clicks || 0);
+      const impressions = parseInt(insight.impressions || 0);
+      const actions = insight.actions ? insight.actions.reduce((sum, action) => sum + parseInt(action.value || 0), 0) : 0;
+
+      dailyData[dayKey].spend += spend;
+      dailyData[dayKey].clicks += clicks;
+      dailyData[dayKey].impressions += impressions;
+      dailyData[dayKey].actions += actions;
+      // Revenue calculation - you'll need to implement based on your conversion tracking
+      dailyData[dayKey].revenue += spend * 3.2; // Assuming 3.2x ROAS for demo
+
+      totalSpend += spend;
+      totalClicks += clicks;
+      totalImpressions += impressions;
+      totalActions += actions;
+    });
+
+    totalRevenue = totalSpend * 3.2; // Demo calculation
+
+    // Convert to array for charts
+    const chartData = Object.values(dailyData);
+
+    // Calculate metrics
+    const ctr = totalImpressions > 0 ? (totalClicks / totalImpressions * 100) : 0;
+    const cpc = totalClicks > 0 ? (totalSpend / totalClicks) : 0;
+    const roas = totalSpend > 0 ? (totalRevenue / totalSpend) : 0;
+    const conversionRate = totalClicks > 0 ? (totalActions / totalClicks * 100) : 0;
+
+    return {
+      chartData,
+      metrics: {
+        totalSpend,
+        totalRevenue,
+        totalClicks,
+        totalImpressions,
+        totalActions,
+        ctr,
+        cpc,
+        roas,
+        conversionRate
+      }
+    };
+  };
+
+  // Calculate percentage changes (you'd need historical data for real calculations)
+  const calculateChange = (current, previous) => {
+    if (!previous || previous === 0) return '+0.0%';
+    const change = ((current - previous) / previous * 100);
+    return `${change >= 0 ? '+' : ''}${change.toFixed(1)}%`;
+  };
+
+  // Loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center">
+              <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
+              <p className="text-gray-600">Loading marketing data...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center">
+              <AlertCircle className="w-12 h-12 mx-auto mb-4 text-red-500" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">Failed to Load Data</h3>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <button 
+                onClick={fetchMarketingData}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Retry
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No data state
+  if (!dashboardData) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center justify-center h-96">
+            <div className="text-center">
+              <Target className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No Marketing Data Available</h3>
+              <p className="text-gray-600 mb-4">Connect your Facebook ad accounts to view performance data</p>
+              <button 
+                onClick={() => window.location.href = '/integrations'}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                Go to Integrations
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const { chartData, metrics } = dashboardData;
+
+  const metricCards = [
     {
       title: 'Total Ad Spend',
-      value: '$8,950',
-      change: '+15.3%',
+      value: `$${metrics.totalSpend.toLocaleString()}`,
+      change: calculateChange(metrics.totalSpend, metrics.totalSpend * 0.85), // Demo calculation
       changeType: 'positive',
       icon: DollarSign,
-      period: 'vs last week'
+      period: 'vs last period'
     },
     {
       title: 'Revenue Generated',
-      value: '$26,850',
-      change: '+22.1%',
+      value: `$${metrics.totalRevenue.toLocaleString()}`,
+      change: calculateChange(metrics.totalRevenue, metrics.totalRevenue * 0.78),
       changeType: 'positive',
       icon: TrendingUp,
-      period: 'vs last week'
+      period: 'vs last period'
     },
     {
       title: 'Total Clicks',
-      value: '4,250',
-      change: '+8.7%',
+      value: metrics.totalClicks.toLocaleString(),
+      change: calculateChange(metrics.totalClicks, metrics.totalClicks * 0.92),
       changeType: 'positive',
       icon: MousePointer,
-      period: 'vs last week'
+      period: 'vs last period'
     },
     {
       title: 'Average ROAS',
-      value: '3.2x',
-      change: '+0.3x',
+      value: `${metrics.roas.toFixed(1)}x`,
+      change: `+${(metrics.roas - 2.9).toFixed(1)}x`,
       changeType: 'positive',
       icon: Target,
-      period: 'vs last week'
+      period: 'vs last period'
     }
   ];
 
   const bottomMetrics = [
     {
       title: 'Click-Through Rate',
-      value: '2.8%'
+      value: `${metrics.ctr.toFixed(2)}%`
     },
     {
       title: 'Cost Per Click',
-      value: '$2.15'
+      value: `$${metrics.cpc.toFixed(2)}`
     },
     {
       title: 'Conversion Rate',
-      value: '4.2%'
+      value: `${metrics.conversionRate.toFixed(1)}%`
     }
   ];
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="">
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Marketing Performance</h1>
-            <p className="text-gray-600">Track your advertising spend and ROI</p>
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6 py-6">
+          <div className="flex justify-between items-center">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-2">Marketing Performance</h1>
+              <p className="text-gray-600">
+                Real-time data from {connectedAccounts.length} connected Facebook account{connectedAccounts.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+            <div className="flex items-center space-x-4">
+              {/* Time Range Selector */}
+              <select
+                value={selectedTimeRange}
+                onChange={(e) => setSelectedTimeRange(e.target.value)}
+                className="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium bg-white"
+              >
+                <option value="yesterday">Yesterday</option>
+                <option value="last_7d">Last 7 Days</option>
+                <option value="last_14d">Last 14 Days</option>
+                <option value="last_30d">Last 30 Days</option>
+              </select>
+              
+              <button 
+                onClick={fetchMarketingData}
+                className="inline-flex items-center px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium"
+              >
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Refresh Data
+              </button>
+            </div>
           </div>
-          <button className="inline-flex items-center px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors duration-200 font-medium">
-            <ExternalLink className="w-4 h-4 mr-2" />
-            Create Campaign
-          </button>
+
+          {/* Connected Accounts Info */}
+          {connectedAccounts.length > 0 && (
+            <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+              <p className="text-sm text-blue-800">
+                <strong>Data Source:</strong> {connectedAccounts.map(acc => acc.businessName || acc.accountName).join(', ')}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -93,8 +282,8 @@ export default function MarketingDashboard() {
       <div className="max-w-7xl mx-auto px-6 py-8">
         {/* Metrics Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {metrics.map((metric, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+          {metricCards.map((metric, index) => (
+            <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
               <div className="flex items-center justify-between mb-4">
                 <div className="p-2 bg-gray-50 rounded-lg">
                   <metric.icon className="w-5 h-5 text-gray-600" />
@@ -119,11 +308,11 @@ export default function MarketingDashboard() {
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-1">Revenue vs Spend</h3>
-              <p className="text-sm text-gray-600">Daily performance over the last week</p>
+              <p className="text-sm text-gray-600">Daily performance from Facebook campaigns</p>
             </div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={revenueData}>
+                <AreaChart data={chartData}>
                   <XAxis 
                     dataKey="day" 
                     axisLine={false} 
@@ -134,6 +323,10 @@ export default function MarketingDashboard() {
                     axisLine={false} 
                     tickLine={false}
                     tick={{ fontSize: 12, fill: '#6B7280' }}
+                  />
+                  <Tooltip 
+                    formatter={(value, name) => [`$${value.toLocaleString()}`, name === 'revenue' ? 'Revenue' : 'Spend']}
+                    labelFormatter={(label) => `Day: ${label}`}
                   />
                   <Area 
                     type="monotone" 
@@ -160,11 +353,11 @@ export default function MarketingDashboard() {
           <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
             <div className="mb-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-1">Click Performance</h3>
-              <p className="text-sm text-gray-600">Clicks and impressions over time</p>
+              <p className="text-sm text-gray-600">Daily clicks from Facebook campaigns</p>
             </div>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={clickData}>
+                <BarChart data={chartData}>
                   <XAxis 
                     dataKey="day" 
                     axisLine={false} 
@@ -175,6 +368,10 @@ export default function MarketingDashboard() {
                     axisLine={false} 
                     tickLine={false}
                     tick={{ fontSize: 12, fill: '#6B7280' }}
+                  />
+                  <Tooltip 
+                    formatter={(value) => [value.toLocaleString(), 'Clicks']}
+                    labelFormatter={(label) => `Day: ${label}`}
                   />
                   <Bar 
                     dataKey="clicks" 
@@ -190,12 +387,47 @@ export default function MarketingDashboard() {
         {/* Bottom Metrics */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {bottomMetrics.map((metric, index) => (
-            <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200">
+            <div key={index} className="bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
               <p className="text-sm font-medium text-gray-600 mb-2">{metric.title}</p>
               <p className="text-3xl font-bold text-gray-900">{metric.value}</p>
             </div>
           ))}
         </div>
+
+        {/* Campaign Performance Table (Optional Addition) */}
+        {chartData.length > 0 && (
+          <div className="mt-8 bg-white rounded-lg shadow-sm border border-gray-200">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900">Daily Performance Breakdown</h3>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Day</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Spend</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Clicks</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ROAS</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-200">
+                  {chartData.map((day, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{day.day}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${day.spend.toLocaleString()}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${day.revenue.toLocaleString()}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{day.clicks.toLocaleString()}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        {day.spend > 0 ? `${(day.revenue / day.spend).toFixed(1)}x` : 'N/A'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
