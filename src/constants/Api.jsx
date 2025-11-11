@@ -32,6 +32,12 @@ const API = {
     fbInsights:`${BASE_URL}/facebook/insights`,
     fbCampaigns:`${BASE_URL}/facebook/campaigns`,
     fbfbRefreshInsights:`${BASE_URL}/facebook/refresh-insights`,
+    shopify:`${BASE_URL}/shopify/connect`,
+    shopifyShops:`${BASE_URL}/shopify/shops`,
+    shopifyConnectShop:`${BASE_URL}/shopify/connect-shop`,
+    shopifyDisconnect:`${BASE_URL}/shopify/disconnect`,
+    google:`${BASE_URL}/google/connect`,
+    googleDisconnect:`${BASE_URL}/google/disconnect`,
   },
   user: {
     getAll: `${BASE_URL}/users`,
