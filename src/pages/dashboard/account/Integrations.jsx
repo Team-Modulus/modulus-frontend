@@ -124,20 +124,37 @@ export default function IntegrationsPage() {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
 
-      if (res.data?.shops) {
-        setShopifyShops(res.data.shops);
-        console.log("Shopify Shops:", res.data.shops);
-        
+      // Always set shops array (even if empty)
+      const shops = res.data?.shops || [];
+      setShopifyShops(shops);
+      console.log("Shopify Shops:", shops);
+      
+      if (shops.length === 0) {
+        console.log("No Shopify shops found");
+        // Show warning if there's a message
+        if (res.data?.message) {
+          console.warn("Shopify shops message:", res.data.message);
+        }
+        if (res.data?.error) {
+          console.error("Shopify shops error:", res.data.error);
+        }
+      } else {
         // ✅ Load currently connected shops (multiple selection)
-        const connectedShops = res.data.shops.filter(shop => shop.connected || shop.isSelected);
+        const connectedShops = shops.filter(shop => shop.connected || shop.isSelected);
         setSelectedShopifyShops(connectedShops.map(shop => shop.shopId || shop.shopDomain));
         setShopifyConnectedCount(connectedShops.length);
-      } else {
-        console.log("No Shopify shops found");
       }
     } catch (err) {
       console.error("Failed to fetch Shopify shops", err);
-      // Optional: Show user-friendly error message
+      // Set empty array on error
+      setShopifyShops([]);
+      setSelectedShopifyShops([]);
+      setShopifyConnectedCount(0);
+      
+      // Show user-friendly error message
+      if (err.response?.data?.error) {
+        console.error("Error details:", err.response.data.error);
+      }
     } finally {
       setShopifyLoading(false);
     }
@@ -1283,10 +1300,30 @@ export default function IntegrationsPage() {
                             <p>Loading shops...</p>
                           </div>
                         ) : (
-                          <div className="space-y-3">
+                          <div className="space-y-4">
                             <AlertCircle className="w-12 h-12 mx-auto text-gray-400" />
-                            <p>No shops found</p>
-                            <p className="text-sm">Make sure you have access to Shopify shops</p>
+                            <div>
+                              <p className="font-medium text-gray-700 mb-2">No shops found</p>
+                              <p className="text-sm text-gray-500 mb-4">
+                                This might happen if:
+                              </p>
+                              <ul className="text-sm text-gray-500 text-left max-w-md mx-auto space-y-1">
+                                <li>• The shop wasn't properly connected during OAuth</li>
+                                <li>• The access token has expired</li>
+                                <li>• There was an error fetching shop data</li>
+                              </ul>
+                            </div>
+                            <button
+                              onClick={async () => {
+                                await fetchShopifyShops();
+                              }}
+                              className="mt-4 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm font-medium"
+                            >
+                              Retry Fetching Shops
+                            </button>
+                            <p className="text-xs text-gray-400 mt-4">
+                              If the issue persists, try disconnecting and reconnecting your Shopify account
+                            </p>
                           </div>
                         )}
                       </div>
